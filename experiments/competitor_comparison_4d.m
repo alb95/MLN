@@ -13,14 +13,14 @@
 % 3) N = [100,100,100], power = 3.
 % 4) N = [100,100,100], sigma = 0.5.
 rng(19)
-N = [100,100,100];
+N = [100,100,100, 100];
 sigma = 0.5;
 %power = 1;
 %power = 2;
 %power = 3;
-T = create_exponential_decaying_tensor(N, sigma);
+%T = create_exponential_decaying_tensor(N, sigma);
 %T = create_polynomial_decaying_tensor(N, power);
-%T = create_3D_hilbert_tensor(100);
+T = create_4D_hilbert_tensor(100);
 Tnorm = norm(T);
 E_hosvd = zeros(1,30);
 E_rhosvd = zeros(1,30);
@@ -29,10 +29,10 @@ E_mln = zeros(1,30);
 
 for i = 1:30
     r = 2*i;
-    B_hosvd = multilinear_svd(T, [r,r,r]);
-    B_rhosvd = multilinear_hmt(T, [r,r,r]);
-    B_srhosvd = sequential_multilinear_hmt(T, [r,r,r]);
-    B_mln = multilinear_nystrom(T, [r,r,r], [floor(r/2),floor(r/2), floor(r/2)]);
+    B_hosvd = multilinear_svd(T, [r,r,r,r]);
+    B_rhosvd = multilinear_hmt(T, [r,r,r,r]);
+    B_srhosvd = sequential_multilinear_hmt(T, [r,r,r,r]);
+    B_mln = multilinear_nystrom(T, [r,r,r,r], [floor(r/2),floor(r/2), floor(r/2),floor(r/2)]);
     E_hosvd(i) = norm(T-B_hosvd)/Tnorm;
     E_rhosvd(i) = norm(T-B_rhosvd)/Tnorm;
     E_rsthosvd(i) = norm(T-B_srhosvd)/Tnorm;

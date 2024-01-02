@@ -23,6 +23,7 @@ T_3 = create_polynomial_decaying_tensor([n,n,n], power);
 T_4 = create_polynomial_decaying_tensor([n,n,n,n], power);
 T_5 = create_polynomial_decaying_tensor([n,n,n,n,n], power);
 
+Tnorm = norm(T_2);
 %T_2 = create_exponential_decaying_tensor([n,n], sigma);
 %T_3 = create_exponential_decaying_tensor([n,n,n], sigma);
 %T_4 = create_exponential_decaying_tensor([n,n,n,n], sigma);
@@ -39,10 +40,10 @@ for i = 1:n-5
     B_3 = multilinear_nystrom(T_3, [r,r,r], ones(1,3)*3);
     B_4 = multilinear_nystrom(T_4, [r,r,r, r], ones(1,4)*3);
     B_5 = multilinear_nystrom(T_5, [r,r,r,r,r], ones(1,5)*3);
-    E_2(i) = norm(T_2-B_2);
-    E_3(i) = norm(T_3-B_3);
-    E_4(i) = norm(T_4-B_4);
-    E_5(i) = norm(T_5-B_5);
+    E_2(i) = norm(T_2-B_2)/Tnorm;
+    E_3(i) = norm(T_3-B_3)/Tnorm;
+    E_4(i) = norm(T_4-B_4)/Tnorm;
+    E_5(i) = norm(T_5-B_5)/Tnorm;
 end
 
 ranks = 1:n-5;

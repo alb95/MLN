@@ -10,26 +10,27 @@
 
 N = [70,70,70];
 sigma = 0.1;
-L = [0,0,0];
+L = [3,3,3];
 T = create_exponential_decaying_tensor(N, sigma);
-E_HOSVD = zeros(1,N(1));
-E_MLN = zeros(1,N(1)); 
-E_SMLN_1 = zeros(1,N(1));
-E_SMLN_10 = zeros(1,N(1));
-for i = 1:70
+Tnorm = norm(T);
+E_HOSVD = zeros(1,N(1)-1);
+E_MLN = zeros(1,N(1)-1); 
+E_SMLN_1 = zeros(1,N(1)-1);
+E_SMLN_10 = zeros(1,N(1)-1);
+for i = 2:70
     r = i;
     R = [r,r,r];
     B_HOSVD = multilinear_svd(T, R);
     B_MLN = multilinear_nystrom(T, R, L);
     B_SMLN_1 = stabilized_multilinear_nystrom(T, R, L, 1);
     B_SMLN_10 = stabilized_multilinear_nystrom(T, R, L, 10);
-    E_HOSVD(i) = norm(T-B_HOSVD);
-    E_MLN(i) = norm(T-B_MLN);
-    E_SMLN_1(i) = norm(T-B_SMLN_1);
-    E_SMLN_10(i) = norm(T-B_SMLN_10);
+    E_HOSVD(i-1) = norm(T-B_HOSVD)/Tnorm;
+    E_MLN(i-1) = norm(T-B_MLN)/Tnorm;
+    E_SMLN_1(i-1) = norm(T-B_SMLN_1)/Tnorm;
+    E_SMLN_10(i-1) = norm(T-B_SMLN_10)/Tnorm;
 end
 
-ranks = 1:N(1);
+ranks = 2:N(1);
 semilogy(ranks, E_HOSVD, '-')
 hold on
 plot(ranks, E_MLN, '-o')
